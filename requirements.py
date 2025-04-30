@@ -83,7 +83,7 @@ patsy==1.0.1
 pexpect==4.9.0
 pillow==11.1.0
 platformdirs==4.3.6
-plotly>=5.0.0
+plotly-express==0.4.1
 prometheus_client==0.21.1
 prompt_toolkit==3.0.50
 prophet==1.1.6
