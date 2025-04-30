@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+from prophet import Prophet
+
+# Step 1: Load base data
+df = pd.read_csv("product_engagement_2yrs.csv", parse_dates=["date"])
+df = df.sort_values("date")
+
+# Step 2: Z-score calculation
+mean_dau = df["daily_active_users"].mean()
+std_dau = df["daily_active_users"].std()
+df["zscore"] = (df["daily_active_users"] - mean_dau) / std_dau
+df["zscore_anomaly"] = (np.abs(df["zscore"]) > 1.5).astype(int)
+
+# Step 3: Prophet forecast
+prophet_df = df[["date", "daily_active_users"]].rename(columns={"date": "ds", "daily_active_users": "y"})
+model = Prophet(daily_seasonality=True, yearly_seasonality=True)
+model.fit(prophet_df)
+
+future = model.make_future_dataframe(periods=0)
+forecast = model.predict(future)
+
+# Step 4: Merge Prophet output
+forecast = forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]]
+forecast = forecast.rename(columns={"ds": "date"})
+merged = pd.merge(df, forecast, on="date", how="left")
+
+# Step 5: Prophet anomaly flag
+merged["prophet_anomaly"] = (
+    (merged["daily_active_users"] < merged["yhat_lower"]) |
+    (merged["daily_active_users"] > merged["yhat_upper"])
+).astype(int)
+
+# Step 6: Save final combined CSV
+merged.to_csv("product_engagement_combined.csv", index=False)
+print("✅ Saved: product_engagement_combined.csv")
