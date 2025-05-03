@@ -81,20 +81,51 @@ The dataset was synthetically generated with the following columns:
 ```bash
 git clone https://github.com/your-username/product-engagement-anomaly-detection.git
 cd product-engagement-anomaly-detection
+```
 
 ### 2. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
+```
 
 ### 3. Generate the Dataset
+
 ```bash
 python data_prep.py
+```
 
 ### 4. Run Anomaly Detection
+
 ```bash
 python Zscore.py
 python fbprophet.py
+```
 
 ### 5. Launch the Dashboard
+
 ```bash
 streamlit run app.py
+```
+
+---
+
+## 📌 Example Output
+
+**Z-Score Anomalies**  
+Anomalies detected based on statistical deviation.
+
+**Prophet Anomalies**  
+Anomalies detected by comparing actual values with forecast bounds.
+
+---
+
+## ✅ Conclusion
+
+This project showcases how statistical (Z-score) and machine learning (Prophet) models can be used for anomaly detection in product engagement data. It provides an interactive and comparative way to monitor user behavior over time.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
